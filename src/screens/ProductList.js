@@ -4,8 +4,6 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react
 import ProductCard from '../components/ProductCard'
 import { Button, Modal } from "react-native";
 
-
-
 const products = [
     {id: '1', name: 'Smartphone', price: '$199', description:'Producto de ejemplo con una descripcion de ejemplo, aqui se puede agregar mas texto', imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s'},
     {id: '2', name: 'Laptop', price: '$999', description:'Segunda descripcion del segundo producto adadjkasdhjasfghasfhgoaf', imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s'},
@@ -36,7 +34,7 @@ const ProductList = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.sectionTitle}>Pantalla de lista de productos disponibles</Text>
+            <Text style={styles.sectionTitle}>Lista de productos</Text>
             <FlatList
                 data={products}
                 renderItem={renderProductItem}
@@ -44,9 +42,6 @@ const ProductList = () => {
                 numColumns={2}
                 columnWrapperStyle={styles.columnWrapper}
             />
-            
-            {/* MODALES PARA CADA UNO DE LOS PRODUCTOS DISPONIBLES */}
-
             {selectedProduct && (
                 <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
                     <View style={styles.modalContainer}>
@@ -59,21 +54,24 @@ const ProductList = () => {
                             <Text style={styles.productPrice}>{selectedProduct.price}</Text>
                             <Text style={styles.productDescription}>{selectedProduct.description}</Text>
 
-                            <View style={{ width: '80%', marginBottom: 10 }}>
+                            <TouchableOpacity onPress={() => { handleAddToCart(selectedProduct); setModalVisible(false); }} style={styles.closeButton}>
+                                <Text style={styles.closeButtonText}>Agregar al carrito</Text>
+                            </TouchableOpacity>
+                            
+                            {/* <View style={{ width: '80%', marginBottom: 10 }}>
                                 <Button
                                     title="Agregar al carrito"
+                                    color="#ffffff"
+                                    backgroundColor="#ffffff"
                                     onPress={() => {
                                         handleAddToCart(selectedProduct);
                                         setModalVisible(false);
                                     }}
                                 />
-                            </View>
-                            <View style={{ width: '80%' }}>
-                                <Button
-                                    title="Cerrar"
-                                    onPress={() => setModalVisible(false)}
-                                />
-                            </View>
+                            </View> */}
+                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                                <Text style={styles.closeButtonText}>Cerrar</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -86,16 +84,16 @@ const ProductList = () => {
 const styles = StyleSheet.create ({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ebe6e5',
         paddingHorizontal: 10,
-        paddingTop: 10,
+        paddingTop: 20,
     },
     sectionTitle: {
         fontSize: 22,
         fontWeight: '600',
-        color: '#333',
-        marginBottom: 10,
-        textAlign: 'center'
+        color: '#000000',
+        marginBottom: 20,
+        paddingHorizontal: 10,
     },
     columnWrapper: {
         justifyContent: 'space-between',
@@ -107,7 +105,7 @@ const styles = StyleSheet.create ({
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: '#ebe6e5',
         padding: 20,
         borderRadius: 10,
         width: '80%',
@@ -115,7 +113,7 @@ const styles = StyleSheet.create ({
         shadowColor: '#000',
         shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
-        textShadowRadius: 5,
+        shadowRadius: 5,
         elevation: 3,
     },
     productImage: {
@@ -123,27 +121,41 @@ const styles = StyleSheet.create ({
         height: 200,
         borderRadius: 15,
         marginBottom: 20,
+        borderColor: "#bcbcbc",
+        borderWidth: 3,
     },
     productName: {
         fontSize: 22,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#000', // Nombre del producto
         marginBottom: 10,
     },
     productPrice: {
         fontSize: 18,
-        color: '#625dff',
+        color: '#af9c98', // Precio del producto
         marginBottom: 10
     },
     productDescription: {
         fontSize: 16,
-        color: '#333',
+        color: '#657275', // Descripción
         marginBottom: 20,
         textAlign: 'center'
     },
     modalButton: {
         marginBottom: 10,
-    }
+    },
+    closeButton:{
+        width: '80%',
+        backgroundColor: '#af9c98',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    closeButtonText:{
+        color: "#ffffff",
+        fontWeight: 'bold',
+    },
 })
 
 export default ProductList;

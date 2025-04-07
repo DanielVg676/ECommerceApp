@@ -18,8 +18,10 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
         borderRadius: 15,
-        margin: 10,
-        padding: 10,
+        marginHorizontal: 10,
+        marginBottom: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         shadowColor: '#000',
         shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
@@ -32,26 +34,29 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 10,
         marginBottom: 10,
+        borderColor: "#bcbcbc",
+        borderWidth: 3,
     },
     productName: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#333'
     },
-    productPrice: {
-        fontSize: 14,
-        color: '#666',
-        marginVertical: 5,
-    },
     addButton: {
-        backgroundColor: '#625dff',
+        backgroundColor: '#af9c98',
         paddingVertical: 10,
         borderRadius: 5,
         alignItems: 'center',
     },
     addButtonText: {
         color: 'white',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingHorizontal: 10,
+    },
+    productPrice: {
+        fontSize: 14,
+        color: '#af9c98',
+        marginVertical: 5,
     },
 })
 
