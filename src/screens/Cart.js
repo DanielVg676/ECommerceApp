@@ -1,11 +1,12 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, Button, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Asegúrate de tener instalado @expo/vector-icons
 
 const Cart = () => {
     const [cart, setCart] = useState([
-        { id: '1', name: 'Smartphone', price: 199, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s' },
-        { id: '2', name: 'Tablet', price: 299, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s' },
-        { id: '3', name: 'Auriculares', price: 99, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s' }
+        { id: '1', name: 'Smartphone', price: 199, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s', quantity: 1 },
+        { id: '2', name: 'Tablet', price: 299, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s', quantity: 1 },
+        { id: '3', name: 'Auriculares', price: 99, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s', quantity: 1 }
     ]);
 
     const handleRemoveItem = (id) => {
@@ -14,8 +15,22 @@ const Cart = () => {
         Alert.alert('Producto Eliminado', 'El producto ha sido eliminado del carrito');
     }
 
+    const increaseQuantity = (id) => {
+        setCart(cart.map(item => 
+            item.id === id ? {...item, quantity: item.quantity + 1} : item
+        ));
+    }
+
+    const decreaseQuantity = (id) => {
+        setCart(cart.map(item => 
+            item.id === id && item.quantity > 1 
+                ? {...item, quantity: item.quantity - 1} 
+                : item
+        ));
+    }
+
     const calculateTotal = () => {
-        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         return total.toFixed(2);
     };
 
@@ -24,10 +39,32 @@ const Cart = () => {
             <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
             <View style={styles.productDetails}>
                 <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.productPrice}>${item.price}</Text>
+                <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
+                
+                <View style={styles.quantityContainer}>
+                    <TouchableOpacity 
+                        onPress={() => decreaseQuantity(item.id)} 
+                        style={styles.quantityButton}
+                    >
+                        <Ionicons name="remove-circle-outline" size={24} color="#af9c98" />
+                    </TouchableOpacity>
+                    
+                    <Text style={styles.quantityText}>{item.quantity}</Text>
+                    
+                    <TouchableOpacity 
+                        onPress={() => increaseQuantity(item.id)} 
+                        style={styles.quantityButton}
+                    >
+                        <Ionicons name="add-circle-outline" size={24} color="#af9c98" />
+                    </TouchableOpacity>
+                </View>
             </View>
-            <TouchableOpacity onPress={() => handleRemoveItem(item.id)} style={styles.removeButton}>
-                <Text style={styles.removeButtonText}>Eliminar</Text>
+            
+            <TouchableOpacity 
+                onPress={() => handleRemoveItem(item.id)} 
+                style={styles.removeButton}
+            >
+                <Ionicons name="trash-outline" size={24} color="#ffffff" />
             </TouchableOpacity>
         </View>
     );
@@ -38,13 +75,22 @@ const Cart = () => {
             {cart.length === 0 ? (
                 <Text style={styles.emptyCartText}>Tu carrito está vacío</Text>
             ) : (
-                <FlatList data={cart} renderItem={renderCartItem} keyExtractor={item => item.id} />
+                <FlatList 
+                    data={cart} 
+                    renderItem={renderCartItem} 
+                    keyExtractor={item => item.id} 
+                    contentContainerStyle={styles.listContent}
+                />
             )}
 
             {cart.length > 0 && (
                 <View style={styles.totalContainer}>
                     <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
-                    <Button title="Proceder a la compra" onPress={() => alert('Procediendo a la compra')} color="#657275" />
+                    <Button 
+                        title="Proceder a la compra" 
+                        onPress={() => alert('Procediendo a la compra')} 
+                        color="#657275" 
+                    />
                 </View>
             )}
         </View>
@@ -63,6 +109,9 @@ const styles = StyleSheet.create({
         color: '#000000',
         marginBottom: 20,
     },
+    listContent: {
+        paddingBottom: 20,
+    },
     cartItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -78,12 +127,12 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     productImage: {
-        width: 50,
-        height: 50,
+        width: 70,
+        height: 70,
         borderRadius: 5,
-        marginRight: 10,
+        marginRight: 15,
         borderColor: "#bcbcbc",
-        borderWidth: 2,
+        borderWidth: 1,
     },
     productDetails: {
         flex: 1,
@@ -92,19 +141,31 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#657275',
+        marginBottom: 5,
     },
     productPrice: {
         fontSize: 14,
         color: '#af9c98',
+        marginBottom: 10,
+    },
+    quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    quantityButton: {
+        padding: 5,
+    },
+    quantityText: {
+        fontSize: 16,
+        marginHorizontal: 10,
+        minWidth: 20,
+        textAlign: 'center',
     },
     removeButton: {
         backgroundColor: '#af9c98',
-        padding: 10,
+        padding: 8,
         borderRadius: 5,
-    },
-    removeButtonText: {
-        color: '#ffffff',
-        fontWeight: 'bold',
+        marginLeft: 10,
     },
     totalContainer: {
         marginTop: 20,
