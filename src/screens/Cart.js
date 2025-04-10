@@ -1,33 +1,35 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, Button, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Asegúrate de tener instalado @expo/vector-icons
+import { Ionicons } from '@expo/vector-icons';
+import images from '../../assets/images'; // Asegúrate de que esta ruta sea correcta
 
 const Cart = () => {
     const [cart, setCart] = useState([
-        { id: '1', name: 'Smartphone', price: 199, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s', quantity: 1 },
-        { id: '2', name: 'Tablet', price: 299, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s', quantity: 1 },
-        { id: '3', name: 'Auriculares', price: 99, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd4jwQIwk_Gt35Plzfu-wfsxh0Sxt4vF1rbQ&s', quantity: 1 }
+        { id: '6', name: 'Cacahuate', price: 29, imageUrl: images.cacahuate, quantity: 1 },
+        { id: '7', name: 'Chiltepin', price: 35, imageUrl: images.chiltepin, quantity: 1 },
+        { id: '8', name: 'Frijol', price: 25, imageUrl: images.frijol, quantity: 2 },
+        { id: '11', name: 'Tornachiles', price: 45, imageUrl: images.tornachiles, quantity: 1 }
     ]);
 
     const handleRemoveItem = (id) => {
         const updatedCart = cart.filter(item => item.id !== id);
         setCart(updatedCart);
         Alert.alert('Producto Eliminado', 'El producto ha sido eliminado del carrito');
-    }
+    };
 
     const increaseQuantity = (id) => {
-        setCart(cart.map(item => 
-            item.id === id ? {...item, quantity: item.quantity + 1} : item
+        setCart(cart.map(item =>
+            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
         ));
-    }
+    };
 
     const decreaseQuantity = (id) => {
-        setCart(cart.map(item => 
-            item.id === id && item.quantity > 1 
-                ? {...item, quantity: item.quantity - 1} 
+        setCart(cart.map(item =>
+            item.id === id && item.quantity > 1
+                ? { ...item, quantity: item.quantity - 1 }
                 : item
         ));
-    }
+    };
 
     const calculateTotal = () => {
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -36,32 +38,32 @@ const Cart = () => {
 
     const renderCartItem = ({ item }) => (
         <View style={styles.cartItem}>
-            <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
+            <Image source={item.imageUrl} style={styles.productImage} /> {/* ✅ CAMBIO AQUÍ */}
             <View style={styles.productDetails}>
                 <Text style={styles.productName}>{item.name}</Text>
                 <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
-                
+
                 <View style={styles.quantityContainer}>
-                    <TouchableOpacity 
-                        onPress={() => decreaseQuantity(item.id)} 
+                    <TouchableOpacity
+                        onPress={() => decreaseQuantity(item.id)}
                         style={styles.quantityButton}
                     >
                         <Ionicons name="remove-circle-outline" size={24} color="#af9c98" />
                     </TouchableOpacity>
-                    
+
                     <Text style={styles.quantityText}>{item.quantity}</Text>
-                    
-                    <TouchableOpacity 
-                        onPress={() => increaseQuantity(item.id)} 
+
+                    <TouchableOpacity
+                        onPress={() => increaseQuantity(item.id)}
                         style={styles.quantityButton}
                     >
                         <Ionicons name="add-circle-outline" size={24} color="#af9c98" />
                     </TouchableOpacity>
                 </View>
             </View>
-            
-            <TouchableOpacity 
-                onPress={() => handleRemoveItem(item.id)} 
+
+            <TouchableOpacity
+                onPress={() => handleRemoveItem(item.id)}
                 style={styles.removeButton}
             >
                 <Ionicons name="trash-outline" size={24} color="#ffffff" />
@@ -75,10 +77,10 @@ const Cart = () => {
             {cart.length === 0 ? (
                 <Text style={styles.emptyCartText}>Tu carrito está vacío</Text>
             ) : (
-                <FlatList 
-                    data={cart} 
-                    renderItem={renderCartItem} 
-                    keyExtractor={item => item.id} 
+                <FlatList
+                    data={cart}
+                    renderItem={renderCartItem}
+                    keyExtractor={item => item.id}
                     contentContainerStyle={styles.listContent}
                 />
             )}
@@ -86,16 +88,16 @@ const Cart = () => {
             {cart.length > 0 && (
                 <View style={styles.totalContainer}>
                     <Text style={styles.totalText}>Total: ${calculateTotal()}</Text>
-                    <Button 
-                        title="Proceder a la compra" 
-                        onPress={() => alert('Procediendo a la compra')} 
-                        color="#657275" 
+                    <Button
+                        title="Proceder a la compra"
+                        onPress={() => alert('Procediendo a la compra')}
+                        color="#657275"
                     />
                 </View>
             )}
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -108,6 +110,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#000000',
         marginBottom: 20,
+        textAlign: "center",
     },
     listContent: {
         paddingBottom: 20,

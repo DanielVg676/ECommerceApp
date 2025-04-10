@@ -1,76 +1,119 @@
-import { React, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 
 const Profile = () => {
-    const [name, setName ] = useState('Prueba Ejemplo');
-    const [email, setEmail] = useState('prueba@example.com');
-    const [image, setImage ] = useState('https://preview.redd.it/3wlrfietzzq31.jpg?width=640&crop=smart&auto=webp&s=fac76e26c430a104b182b73389c5ca0d951d46d8')
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [image, setImage] = useState(null);
 
-    const handleNameChange = (text) => {
-        setName(text);
-    }
+    const handleNameChange = (text) => setName(text);
+    const handleEmailChange = (text) => setEmail(text);
 
-    const handleEmailChange = (text) => {
-        setEmail(text);
-    }
-
-    const handleChangeProfileImage = async () => {
-        const permissionResult = await ImagePicker.
-    
-    requestMediaLibraryPermissionsAsync();
-
+    const pickImage = async () => {
+        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permissionResult.granted === false) {
-            alert('Se necesitan permisos para acceder a la galeria');
+            Alert.alert('Permiso requerido', 'Se necesita acceso a la galería para seleccionar una imagen.');
             return;
         }
-
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
         });
-        console.log ("Resultado de la seleccion de la imagen: ", result);
-
-        if (!result.canceled) {
-            const imageUri = result.assets[0].uri;
-            console.log("Imagen seleccionada URI: ", imageUri);
-            setImage(imageUri);
-            Alert.alert('Imagen actualizada', 'Tu imagen de perfil ha sido actualizada');
+        
+        if (!pickerResult.canceled && pickerResult.assets.length > 0) {
+            setImage(pickerResult.assets[0].uri);
+            Alert.alert('Imagen actualizada', 'Tu imagen de perfil ha sido cambiada.');
         }
+        
     };
 
-    const handleSaveChanges = () => {
-        Alert.alert('Cambios guardados', 'Tu perfil ha sido actualizado')
-    }
+    const handleSave = () => {
+        Alert.alert('Perfil actualizado', 'Se han guardado los cambios.');
+    };
 
     return (
         <View style={styles.container}>
-            <View style={styles.profileImageContainer}>
-                <Image source={{uri: image}} style={styles.profileImage}></Image>
-                <TouchableOpacity onPress={handleChangeProfileImage} style={styles.changeImageButton}>
-                    <Text style={styles.changeImageText}>Cambiar Imagen</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>Cambiar Nombre: </Text>
-                <TextInput style={styles.input} value={name} onChangeText={handleNameChange}/>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>Correo Electronico: </Text>
-                <TextInput style={styles.input} value={email} onChangeText={handleEmailChange}/>
-            </View>
-
-            <TouchableOpacity onPress={() => handleSaveChanges()} style={styles.changeButton}>
-                    <Text style={styles.changeButtonText}>Guardar cambios</Text>
+            <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+                {image ? (
+                    <Image source={{ uri: image }} style={styles.profileImage} />
+                ) : (
+                    <Ionicons name="person-circle" size={120} color="#2c3e50" />
+                )}
+                <Ionicons name="camera" size={24} color="white" style={styles.cameraIcon} />
+            </TouchableOpacity>
+            <Text style={styles.label}>Nombre</Text>
+            <TextInput style={styles.input} value={name} onChangeText={handleNameChange} placeholder="Ingrese su nombre" />
+            <Text style={styles.label}>Correo Electrónico</Text>
+            <TextInput style={styles.input} value={email} onChangeText={handleEmailChange} placeholder="Ingrese su correo" keyboardType="email-address" />
+            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <Text style={styles.saveButtonText}>Guardar Cambios</Text>
             </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '##ebe6e5',
+        padding: 20,
+        alignItems: 'center',
+    },
+    imageContainer: {
+        position: 'relative',
+        marginBottom: 20,
+    },
+    profileImage: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+    },
+    cameraIcon: {
+        position: 'absolute',
+        bottom: 5,
+        right: 5,
+        backgroundColor: '#27ae60',
+        padding: 6,
+        borderRadius: 15,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#2c3e50',
+        alignSelf: 'flex-start',
+        marginBottom: 5,
+    },
+    input: {
+        width: '100%',
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 15,
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#dcdcdc',
+    },
+    saveButton: {
+        backgroundColor: '#af9c98',
+        padding: 12,
+        borderRadius: 10,
+        width: '100%',
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+});
+
+
+const styless = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ebe6e5',

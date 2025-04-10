@@ -4,12 +4,18 @@ import ProductCard from '../components/ProductCard'; // Asegúrate de que este a
 import images from '../../assets/images';
 
 const products = [
-    { id: '1', name: 'Camarones', price: '$99', imageUrl: images.camarones, description: 'Camarones secos con un sabor estupendo para platillos gourmet.' },
-    { id: '2', name: 'Mangos', price: '$89', imageUrl: images.mangos, description: 'Mangos enchilados con el mejor sabor de durango' },
-    { id: '3', name: 'Almendras', price: '$59', imageUrl: images.almendras, description: 'Almendras de alta calidad, ricas en nutrientes.' },
-    { id: '4', name: 'Pistaches', price: '$49', imageUrl: images.pistaches, description: 'Pistaches crujientes con un sabor exquisito.' },
+    { id: '1', name: 'Camarones', price: '$99 x 100gr', imageUrl: images.camarones, description: 'Camarones secos con un sabor estupendo para platillos gourmet.' },
+    { id: '2', name: 'Mangos', price: '$89 x 100gr', imageUrl: images.mangos, description: 'Mangos enchilados con el mejor sabor de Durango.' },
+    { id: '3', name: 'Almendras', price: '$59 x 100gr', imageUrl: images.almendras, description: 'Almendras de alta calidad, ricas en nutrientes.' },
+    { id: '4', name: 'Pistaches', price: '$49 x 100gr', imageUrl: images.pistaches, description: 'Pistaches crujientes con un sabor exquisito.' },
+    { id: '5', name: 'Pasas', price: '$39 x 100gr', imageUrl: images.pasas, description: 'Pasas con una dulzura y sabor inigualable.' },
+    { id: '6', name: 'Cacahuate', price: '$80 x kg', imageUrl: images.cacahuate, description: 'Cacahuates tostados al punto perfecto, ideales para botanear.' },
+    { id: '7', name: 'Chiltepin', price: '$95 x 100gr', imageUrl: images.chiltepin, description: 'Chiltepin silvestre, picor intenso para los más valientes.' },
+    { id: '8', name: 'Frijol', price: '$25 x kg', imageUrl: images.frijol, description: 'Frijol de la región, perfecto para tus recetas tradicionales.' },
+    { id: '9', name: 'Nuez', price: '$270 x kg', imageUrl: images.nuez, description: 'Nuez fresca, ideal para repostería o disfrutar como snack.' },
+    { id: '10', name: 'Sal Bulto', price: '$100', imageUrl: images.sal, description: 'Sal de mesa refinada con minerales esenciales.' },
+    { id: '11', name: 'Tornachiles', price: '$150 x Bote', imageUrl: images.tornachiles, description: 'Tornachiles picantes y crujientes, una explosión de sabor.' },
 ];
-
 
 const ProductList = () => {
     const [cart, setCart] = useState([]);
