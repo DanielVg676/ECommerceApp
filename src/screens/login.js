@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } fro
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,6 +28,7 @@ export default function LoginScreen() {
         Alert.alert('Éxito', 'Inicio de sesión exitoso');
         console.log('Datos:', response.data);
         // Aquí podrías navegar a otra pantalla o guardar el token
+        navigation.replace("Main");
       }
     } catch (error) {
       setLoading(false);
