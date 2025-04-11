@@ -1,44 +1,81 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
-import { ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+  Modal,
+  Pressable,
+} from "react-native";
 import * as Animatable from "react-native-animatable";
 
 const { width } = Dimensions.get("window");
 
-
 const categorias = [
-    {
-      id: "1",
-      title: "Frutos Secos Naturales",
-      imagenUrl: "https://images.unsplash.com/photo-1543158181-1274e5362710?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: "2",
-      title: "Frutos Secos Tostados",
-      imagenUrl: "https://images.unsplash.com/photo-1585536301151-2afb2fb1c960?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: "3",
-      title: "Frutas Deshidratadas",
-      imagenUrl: "https://plus.unsplash.com/premium_photo-1669381244401-29d6ca9d5742?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: "4",
-      title: "Semillas",
-      imagenUrl: "https://images.unsplash.com/photo-1542990253-a781e04c0082?q=80&w=2594&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
-  
-  const carouselImages = [
-    "https://images.unsplash.com/photo-1543158181-1274e5362710?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1585536301151-2afb2fb1c960?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1542990253-a781e04c0082?q=80&w=2594&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1600189020840-e9918c25269d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZnJ1dG9zJTIwc2Vjb3N8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1543208541-0961a29a8c3d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGZydXRvcyUyMHNlY29zfGVufDB8fDB8fHww",
-  ];
-  
+  {
+    id: "1",
+    title: "Frutos Secos Naturales",
+    imagenUrl:
+      "https://images.unsplash.com/photo-1543158181-1274e5362710?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: "2",
+    title: "Frutos Secos Tostados",
+    imagenUrl:
+      "https://images.unsplash.com/photo-1585536301151-2afb2fb1c960?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: "3",
+    title: "Frutas Deshidratadas",
+    imagenUrl:
+      "https://plus.unsplash.com/premium_photo-1669381244401-29d6ca9d5742?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: "4",
+    title: "Semillas",
+    imagenUrl:
+      "https://images.unsplash.com/photo-1542990253-a781e04c0082?q=80&w=2594&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+];
+
+const carouselImages = [
+  "https://images.unsplash.com/photo-1543158181-1274e5362710?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1585536301151-2afb2fb1c960?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1542990253-a781e04c0082?q=80&w=2594&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1600189020840-e9918c25269d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZnJ1dG9zJTIwc2Vjb3N8ZW58MHx8MHx8fDA%3D",
+  "https://images.unsplash.com/photo-1543208541-0961a29a8c3d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGZydXRvcyUyMHNlY29zfGVufDB8fDB8fHww",
+];
+
 const Home = () => {
   const [currentImage, setCurrentImage] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const integrantes = [
+    {
+      nombre: "Karen Vazquez",
+      foto: "https://randomuser.me/api/portraits/women/44.jpg",
+    },
+    {
+      nombre: "Daniel Aurelio",
+      foto: "https://randomuser.me/api/portraits/men/45.jpg",
+    },
+    {
+      nombre: "Daniel Soto",
+      foto: "https://randomuser.me/api/portraits/men/46.jpg",
+    },
+    {
+      nombre: "Cristian Vargas",
+      foto: "https://randomuser.me/api/portraits/men/36.jpg",
+    },
+    {
+      nombre: "Natalia Niebla",
+      foto: "https://randomuser.me/api/portraits/women/6.jpg",
+    },
+  ];
 
   const goToNextImage = () => {
     setCurrentImage((prev) => (prev + 1) % carouselImages.length);
@@ -96,6 +133,36 @@ const Home = () => {
           ))}
         </View>
       </View>
+
+      {/* Botón flotante de información */}
+      <Animatable.View animation="bounceIn" duration={1000} delay={500} style={styles.infoButton}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.infoButtonText}>Nuestro equipo</Text>
+        </TouchableOpacity>
+      </Animatable.View>
+
+      {/* Modal de información */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Integrantes del equipo</Text>
+            {integrantes.map((persona, index) => (
+              <View key={index} style={styles.integranteContainer}>
+                <Image source={{ uri: persona.foto }} style={styles.fotoIntegrante} />
+                <Text style={styles.nombreIntegrante}>{persona.nombre}</Text>
+              </View>
+            ))}
+            <Pressable style={styles.cerrarModal} onPress={() => setModalVisible(false)}>
+              <Text style={{ color: "#fff", fontWeight: "600" }}>Cerrar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -103,7 +170,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ebe6e5'",
+    backgroundColor: "#ebe6e5",
     paddingHorizontal: 20,
     paddingTop: 10,
   },
@@ -176,19 +243,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   carouselButtonLeft: {
-    position: 'absolute',
-    top: '45%',
+    position: "absolute",
+    top: "45%",
     left: 15,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
     padding: 10,
     borderRadius: 30,
     zIndex: 1,
   },
   carouselButtonRight: {
-    position: 'absolute',
-    top: '45%',
+    position: "absolute",
+    top: "45%",
     right: 15,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
     padding: 10,
     borderRadius: 30,
     zIndex: 1,
@@ -212,6 +279,64 @@ const styles = StyleSheet.create({
     backgroundColor: "#a0522d",
     width: 12,
     height: 12,
+  },
+  infoButton: {
+    position: "absolute",
+    bottom: 510,
+    right:90,
+    backgroundColor: "green",
+    width: 180,
+    height: 35,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  infoButtonText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 25,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#5a3e36",
+  },
+  integranteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  fotoIntegrante: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  nombreIntegrante: {
+    fontSize: 16,
+    color: "#4b2e2e",
+  },
+  cerrarModal: {
+    marginTop: 20,
+    backgroundColor: "#8b4513",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 10,
   },
 });
 
